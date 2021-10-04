@@ -2,7 +2,8 @@
 An exploratory Javascript 2D game.
 
 This is a 2D top-down (or perhaps isometric - haven't decided yet) Javascript game I want to develop that follows the adventures of a cat
-as they search for the lost friend, Harley. I think that its
+as they search for the lost friend, Harley. Primarily an RPG, it features some puzzle and interactive elements that require the player interact
+with the world in a more sophisticated manner.
 
 ### Targeted features for first round
 ---
