@@ -3,7 +3,7 @@
 body {
     font-family: Rubik, san-serif;
     color: #fff;
-    background-color: #333;
+    background-color: #444;
 }
 
 #wrapper {
@@ -17,6 +17,9 @@ body {
     display: flex;
     flex-direction: column;
     width: 50vw;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
 }
 
 #title {
