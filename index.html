@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,14 +14,10 @@
             <div id="title">
                 <h1>Hunt for Harley</h1>
             </div>
-            <div id="game-display">
-                <canvas width="800" height="800" id="gameboard">
-                    <script>
-                        const canvas = document.getElementById('gameboard');
-                        const ctx = canvas.getContext('2d');
-                        ctx.fillRect(0, 0, 500, 500);
-                    </script>
-                </canvas>
+            <div id="game-stage">
+                <canvas id="ui-layer"></canvas>
+                <canvas id="game-layer"></canvas>
+                <canvas id="bkg-layer"></canvas>
             </div>
         </div>
     </div>
