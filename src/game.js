@@ -1,14 +1,73 @@
-const gameCanvas = document.getElementById('game-layer');
-const gameContext = gameCanvas.getContext('2d');
+import { buildCanvas } from './utils/canvas.js';
+import { keys } from './utils/events.keys.js';
+import { Intro } from './context/Intro.js';
+import { GrassyMap } from './map/maps/GrassyMap.js';
+import { Player } from './player/Player.js';
 
-let scale = window.devicePixelRatio;
-// scale = 2;
-gameCanvas.width = Math.floor(640 * scale);
-gameCanvas.height = Math.floor(480 * scale);
+import { gameUpdate } from './engine/game.update.js';
+import { gameRender } from './engine/game.render.js';
+import { gameLoop } from './engine/game.loop.js';
 
-gameContext.scale(scale,scale);
-gameContext.imageSmoothingEnabled = false;
+class Game {
 
-gameContext.textAlign = 'center';
-gameContext.font = '18pt Arial';
-gameContext.fillText('Hello World', 640/2, 480/2)
+    constructor() {
+
+        this.state = {};
+
+        this.constants = {
+            width: null,
+            height: null,
+            scale: null,
+            tileSize: 16,
+        };
+        this.events = {
+            keys: keys,
+        }
+
+
+        this.buildContext();
+
+        this.view = {
+            globalX: this.constants.width / 2,
+            globalY: this.constants.height / 2,
+        }
+
+        // Initialize the game
+        // this.addEntity(new Intro(this), 'intro');
+        this.addEntity(new GrassyMap(this), 'map');
+        this.addEntity(new Player(this), 'player')
+
+
+        this.update = gameUpdate(this);
+        this.render = gameRender(this);
+        this.loop = gameLoop(this);
+
+    }
+
+    buildContext() {
+        const canvases = ['bkg', 'player', 'ui'];
+        canvases.forEach(val => {
+            const { canvas, context, width, height, scale } = buildCanvas('game-stage', `${val}-canvas`);
+            this[`${val}Canvas`] = canvas;
+            this[`${val}Context`] = context;
+            this.constants.width = width;
+            this.constants.height = height;
+            this.constants.scale = scale;
+        });
+
+    }
+
+    addEntity(entity, label) {
+        this.state.entities = this.state.entities || {};
+        this.state.entities[label] = entity;
+    }
+
+    removeEntity(label) {
+        this.state.entities = this.state.entities || {};
+        delete this.state.entities[label]
+    }
+}
+
+window.game = new Game();
+
+export default game
