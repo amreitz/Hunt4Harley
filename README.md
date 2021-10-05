@@ -10,15 +10,15 @@ with the world in a more sophisticated manner.
 ### Targeted features for first round
 ---
 - Player
-  - [ ] Walking around the screen
-  - [ ] Responsiveness to keys 
+  - [x] Walking around the screen
+  - [x] Responsiveness to keys 
   - [ ] Interactions with elements on the screen
     - [ ] Handling of boundaries/no-go zones
     - [ ] Handling of interaction with characters
     - [ ] Handling of interaction with items
 - Maps
-  - [ ] Map generation and display
-  - [ ] Map updating engine (not on every refresh unless player is moving)
+  - [x] Map generation and display
+  - [x] Map updating engine (not on every refresh unless player is moving)
   - [ ] Population of environmental elements
   - [ ] Population of NPC/characters and important interactive items
   - [ ] Intro fade screen
@@ -29,10 +29,10 @@ with the world in a more sophisticated manner.
   - [ ] Animations for characters
   - [ ] Movement and population in map
 - Engine
-  - [ ] Main game loop (update -> render -> repeat)
-  - [ ] Keystoke listeners
-  - [ ] Building layer canvas elements
+  - [x] Main game loop (update -> render -> repeat)
+  - [x] Keystoke listeners
+  - [x] Building layer canvas elements
 - Mobile responsiveness
-  - [ ] Screen size adjustments
-  - [ ] Handling of Retina displays
+  - [x] Screen size adjustments
+  - [x] Handling of Retina displays
   
