@@ -1,4 +1,4 @@
-import { addMouseEvent, removeMouseEvent } from "../utils/events.mouse.js";
+import { addMouseEvent, removeMouseEvent, addTouchEvent, removeTouchEvent } from "../utils/events.mouse.js";
 
 class Scene {
     constructor(scope, clickable=true) {
@@ -15,14 +15,21 @@ class Scene {
 
         if (clickable) {
             addMouseEvent(this, this.canvas, 'clicks')
+            addTouchEvent(this, this.canvas, 'touches')
         }
     }
 
-    removeEvents(name) {
+    removeMouseEvent(name) {
         if (this.events) {
             removeMouseEvent(this, this.canvas, name);
         }
     }
+    removeTouchEvent(name) {
+        if (this.events) {
+            removeTouchEvent(this, this.canvas, name);
+        }
+    }
+    
 
     render() {
 

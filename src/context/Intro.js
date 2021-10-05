@@ -23,7 +23,7 @@ class Intro extends Scene {
     update () {
         if (this.proceedButton) {
             if (this.proceedButton.checkClicked(this.clickX, this.clickY)) {
-            console.log("You clicked the button!");
+            alert("You clicked the button!");
             this.clickX = 0;
             this.clickY = 0;
             }
