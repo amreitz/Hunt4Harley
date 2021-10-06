@@ -3,7 +3,7 @@
  * perform any state calculations / updates
  * to properly render the next frame.
  */
- function gameUpdate(scope) {
+function gameUpdate(scope) {
     return function update() {
         const state = scope.state || {};
 
