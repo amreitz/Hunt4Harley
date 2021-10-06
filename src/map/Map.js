@@ -38,38 +38,38 @@ class Map {
         let xoffset = 0;
         let yoffset = 0;
 
-        const xmin = state.globalX - state.viewWidth / 2;
-        const xmax = state.globalX + state.viewWidth / 2
-        const ymin = state.globalY - state.viewHeight / 2
-        const ymax = state.globalY + state.viewHeight / 2
+        let playerWidth = state.playerWidth / 2;
+        let playerHeight = state.playerHeight / 2;
+
+        const xmin = state.globalX + playerWidth - state.viewWidth / 2;
+        const xmax = state.globalX + state.viewWidth / 2;
+        const ymin = state.globalY + playerHeight - state.viewHeight / 2;
+        const ymax = state.globalY + state.viewHeight / 2;
+
+        const width = this.width - playerWidth;
+        const height = this.height - playerHeight;
 
 
-        if (xmin >= 0 && xmax <= this.width) {
-
+        if (xmin > 0 && xmax < width) {
             startCol = Math.floor(xmin / this.tileSize);
-            endCol = Math.ceil(xmax / this.tileSize);
+            endCol = Math.ceil(xmax / this.tileSize) + 1;
             xoffset = startCol * this.tileSize - xmin;
 
-        } else if (xmin < 0) {
-
+        } else if (xmin <= 0) {
             startCol = 0;
             endCol = Math.ceil(state.viewWidth / this.tileSize);
 
-        } else if (xmax > this.width && xmin <= this.width) {
-
+        } else if (xmax >= width && xmin < width) {
             startCol = Math.floor(this.nCols - state.viewWidth / this.tileSize)
             endCol = this.nCols;
 
-        } else {
-            startCol = this.nCols;
-            endCol = this.nCols;
         }
 
         // Middle case - figure out which rows/columns to grab
-        if (ymin >= 0 && ymax <= this.height) {
+        if (ymin >= 0 && ymax <= height) {
 
             startRow = Math.floor(ymin / this.tileSize);
-            endRow = Math.ceil(ymax / this.tileSize);
+            endRow = Math.ceil(ymax / this.tileSize) + 1;
             yoffset = startRow * this.tileSize - ymin;
 
             // Top case - if y is too high to see
@@ -79,7 +79,7 @@ class Map {
             endRow = Math.ceil(state.viewHeight / this.tileSize);
 
             // Bottom case - ymax outside of bounds, but ymin still in it
-        } else if (ymax > this.height && ymin < this.height) {
+        } else if (ymax > height && ymin < height) {
 
             startRow = Math.floor(this.nRows - state.viewHeight / this.tileSize);
             endRow = this.nRows;

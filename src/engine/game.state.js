@@ -12,6 +12,9 @@ class State {
 
         this.tileSize = 16;
 
+        this.playerWidth = 0;
+        this.playerHeight = 0;
+
     }
 
     update(target, val) {
