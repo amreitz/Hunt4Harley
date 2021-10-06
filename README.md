@@ -12,8 +12,9 @@ with the world in a more sophisticated manner.
 - Player
   - [x] Walking around the screen
   - [x] Responsiveness to keys 
+  - [x] Responsive animated sprites
   - [ ] Interactions with elements on the screen
-    - [ ] Handling of boundaries/no-go zones
+    - [x] Handling of boundaries/no-go zones
     - [ ] Handling of interaction with characters
     - [ ] Handling of interaction with items
 - Maps
@@ -35,4 +36,4 @@ with the world in a more sophisticated manner.
 - Mobile responsiveness
   - [x] Screen size adjustments
   - [x] Handling of Retina displays
-  
+  - [ ] Touch-based input control

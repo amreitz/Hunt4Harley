@@ -20,10 +20,12 @@ class Player {
             walking: new SpriteLoader('./src/graphics/kitty2.png', 32, 5),
         };
 
-        this.moveSpeed = 4;
+        this.moveSpeed = 8;
 
         this.width = 64;
         this.height = 64;
+        state.update('playerWidth', this.width);
+        state.update('playerHeight', this.height);
 
         this.context = scope.playerContext;
         this.keys = scope.events.keys;
@@ -84,22 +86,22 @@ class Player {
 
         let finalX, finalY;
 
-        if (Y > (mapHeight - viewHeight / 2 - height / 2)) {
+        if (Y >= (mapHeight - viewHeight / 2 - height / 2)) {
             finalY = Math.round((viewHeight - (mapHeight - Y)));
-        } else if (Y < viewHeight / 2 - height / 2) {
+        } else if (Y <= viewHeight / 2 - height / 2) {
             finalY = Math.round(Y);
         } else {
             finalY = Math.round(viewHeight / 2 - height / 2);
         }
 
-        if (X > (mapWidth - viewWidth / 2 - width / 2)) {
+        if (X >= (mapWidth - viewWidth / 2 - width / 2)) {
             finalX = Math.round((viewWidth - (mapWidth - X)));
-        } else if (X < viewWidth / 2 - width / 2) {
+        } else if (X <= viewWidth / 2 - width / 2) {
             finalX = Math.round(X);
         } else {
             finalX = Math.round(viewWidth / 2 - width / 2);
         }
-
+        console.log(X, Y, finalX, finalY)
         return {
             x: finalX,
             y: finalY,
