@@ -2,7 +2,10 @@ import state from '../engine/game.state.js';
 
 // Find if the desired x,y location (and width/height of object)
 // collides with any known boundaries on the map.
-function isBoundaryHit(x, y, w, h) {
+function isBoundaryHit(val, coord, w, h) {
+    const x = (coord === 'globalX') ? val : state[coord];
+    const y = (coord === 'globalY') ? val : state[coord];
+
     let row1 = Math.floor(x / state.mapTileSize);
     let col1 = Math.floor(y / state.mapTileSize);
 

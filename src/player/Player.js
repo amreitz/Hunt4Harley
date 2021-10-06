@@ -1,14 +1,26 @@
 import state from '../engine/game.state.js';
 import isBoundaryHit from '../utils/interactions.js';
+import SpriteLoader from './SpriteLoader.js';
 
 class Player {
 
     constructor(scope) {
         this.isActive = true;
+        this.isVisible = true;
 
-        this.state = {
-            moveSpeed: 8,
+        this.animation = {
+            state: 'idle',
+            dir: 'down',
+            clock: Math.floor(Date.now() / 100),
+            frame: 0,
+        }
+
+        this.sprites = {
+            idle: new SpriteLoader('./src/graphics/kitty.png', 32, 0.5),
+            walking: new SpriteLoader('./src/graphics/kitty2.png', 32, 5),
         };
+
+        this.moveSpeed = 4;
 
         this.width = 64;
         this.height = 64;
@@ -19,10 +31,10 @@ class Player {
         this.globalX = state.globalX;
         this.globalY = state.globalY;
 
+
     };
 
     movePlayer(dir, step) {
-
         if (this.keys.isPressed[dir]) {
             let pos, mapDimension, playerSize
             if (dir === 'left' || dir === 'right') {
@@ -36,14 +48,14 @@ class Player {
             }
 
             const globalSize = state[`map${mapDimension}`]
+            this.animation.dir = dir;
+            this.animation.state = 'walking';
 
             if (state[pos] <= globalSize - playerSize) {
-                let newVal = state[pos] + this.state.moveSpeed * step;
-                state.update(pos, newVal);
-                this[pos] = newVal;
-                if (isBoundaryHit(state.globalX, state.globalY, this.width, this.height)) {
-                    state.update(pos, state[pos] - this.state.moveSpeed * step);
-                    this[pos] = state[pos] - this.state.moveSpeed * step;
+                let newVal = state[pos] + this.moveSpeed * step;
+                if (!isBoundaryHit(newVal, pos, this.width, this.height)) {
+                    state.update(pos, newVal);
+                    this[pos] = state[pos];
                 };
             }
             // make sure we aren't exceeding the viewport or global map
@@ -64,25 +76,28 @@ class Player {
         const viewWidth = state.viewWidth;
         const viewHeight = state.viewHeight;
 
+        const width = this.width;
+        const height = this.height;
+
         const Y = state.globalY;
         const X = state.globalX;
 
         let finalX, finalY;
 
-        if (Y > (mapHeight - viewHeight / 2 - this.height / 2)) {
+        if (Y > (mapHeight - viewHeight / 2 - height / 2)) {
             finalY = Math.round((viewHeight - (mapHeight - Y)));
-        } else if (Y < viewHeight / 2 - this.height / 2) {
+        } else if (Y < viewHeight / 2 - height / 2) {
             finalY = Math.round(Y);
         } else {
-            finalY = Math.round(viewHeight / 2 - this.height / 2);
+            finalY = Math.round(viewHeight / 2 - height / 2);
         }
 
-        if (X > (mapWidth - viewWidth / 2 - this.width / 2)) {
+        if (X > (mapWidth - viewWidth / 2 - width / 2)) {
             finalX = Math.round((viewWidth - (mapWidth - X)));
-        } else if (X < viewWidth / 2 - this.width / 2) {
+        } else if (X < viewWidth / 2 - width / 2) {
             finalX = Math.round(X);
         } else {
-            finalX = Math.round(viewWidth / 2 - this.width / 2);
+            finalX = Math.round(viewWidth / 2 - width / 2);
         }
 
         return {
@@ -91,19 +106,42 @@ class Player {
         }
     }
 
+    animate(x, y) {
+        const { clock, frame, dir, state } = this.animation;
+        const sprite = this.sprites[state]
+        if (this.sprites[state].isLoaded) {
+            if ((Math.floor(Date.now() / 100) - clock) > (1 / sprite.fps)) {
+                this.animation.clock = Math.floor(Date.now() / 100);
+                this.animation.frame = (frame < (sprite.nFrames - 1)) ? this.animation.frame + 1 : 0;
+            }
+            const tile = sprite.fetchTile(dir, frame);
+            this.context.drawImage(
+                tile.img,
+                tile.x, tile.y, sprite.tileWidth, sprite.tileHeight,
+                x, y, this.width, this.height
+            );
+        }
+    }
+
     update() {
-        this.movePlayer('left', -1)
-        this.movePlayer('right', 1);
-        this.movePlayer('up', -1);
-        this.movePlayer('down', 1);
+        if (this.isActive) {
+            if (this.keys.isPressed.left || this.keys.isPressed.right || this.keys.isPressed.up || this.keys.isPressed.down) {
+                this.movePlayer('left', -1)
+                this.movePlayer('right', 1);
+                this.movePlayer('up', -1);
+                this.movePlayer('down', 1);
+            } else {
+                this.animation.state = 'idle';
+            }
+
+        }
     };
 
     render() {
         if (this.isActive) {
             const coords = this.getLocalPosition();
             this.context.clearRect(0, 0, state.viewWidth, state.viewHeight)
-            this.context.fill = '#fff'
-            this.context.fillRect(coords.x, coords.y, this.width, this.height);
+            this.animate(coords.x, coords.y);
         }
     }
 };
