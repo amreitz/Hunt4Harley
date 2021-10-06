@@ -5,7 +5,7 @@
  * it will call all game entities `render`
  * methods.
  */
- function gameRender(scope) {
+function gameRender(scope) {
     // Setup globals
     var w = scope.width,
         h = scope.height;

@@ -3,7 +3,7 @@
  * updating the game state and re-rendering the canvas
  * (using the updated state) at the configured FPS.
  */
- function gameLoop(scope) {
+function gameLoop(scope) {
     const loop = window;
     // console.log("Looping mechanism successfully called")
     // Main game rendering loop

@@ -1,3 +1,6 @@
+import state from '../engine/game.state.js';
+import game from '../game.js';
+
 class Map {
     constructor(scope, grid, boundaries, tileSheet) {
         this.grid = grid;
@@ -12,97 +15,111 @@ class Map {
         this.width = this.nCols * this.tileSize;
         this.height = this.nRows * this.tileSize;
 
-        this.viewWidth = scope.constants.width;
-        this.viewHeight = scope.constants.height;
-
         this.isLoaded = false;
-        this.needsUpdate = false;
-
         this.context = scope.bkgContext;
 
-        // Set the visible x/y values to link to the global view
-        Object.defineProperty(this, 'view', {
-            get: function () {
-                return {
-                    xmin: scope.view.globalX - scope.constants.width / 2,
-                    xmax: scope.view.globalX + scope.constants.width / 2,
-                    ymin: scope.view.globalY - scope.constants.height / 2,
-                    ymax: scope.view.globalY + scope.constants.height / 2,
-                }
-            },
-            configurable: true,
-            enumerable: true,
-        });
+        this.previous = { ...this.getVisibleGrid() };
+        this.current = { ...this.getVisibleGrid() };
 
-        this.previous = { ...this.view };
-        this.current = { ...this.view };
+        state.update('mapWidth', this.width);
+        state.update('mapHeight', this.height);
+        state.update('mapCols', this.nCols);
+        state.update('mapRows', this.nRows);
+        state.update('boundaries', this.boundaries);
+        state.update('mapTileSize', this.tileSize);
+
+        state.update('globalX', this.width / 2);
+        state.update('globalY', this.height / 2);
 
     }
 
     getVisibleGrid() {
         let startCol, endCol, startRow, endRow
+        let xoffset = 0;
+        let yoffset = 0;
 
-        if (this.view.xmin >= 0 && this.view.xmax <= this.width) {
-            startCol = Math.floor(this.view.xmin / this.tileSize);
-            endCol = Math.ceil(this.view.xmax / this.tileSize);
-        } else if (this.view.xmin < 0) {
+        const xmin = state.globalX - state.viewWidth / 2;
+        const xmax = state.globalX + state.viewWidth / 2
+        const ymin = state.globalY - state.viewHeight / 2
+        const ymax = state.globalY + state.viewHeight / 2
+
+
+        if (xmin >= 0 && xmax <= this.width) {
+
+            startCol = Math.floor(xmin / this.tileSize);
+            endCol = Math.ceil(xmax / this.tileSize);
+            xoffset = startCol * this.tileSize - xmin;
+
+        } else if (xmin < 0) {
+
             startCol = 0;
-            endCol = Math.ceil(this.viewWidth / this.tileSize);
-        } else if (this.view.xmax > this.width && this.view.xmin <= this.width) {
-            startCol = Math.floor(this.nCols - this.viewWidth / this.tileSize)
+            endCol = Math.ceil(state.viewWidth / this.tileSize);
+
+        } else if (xmax > this.width && xmin <= this.width) {
+
+            startCol = Math.floor(this.nCols - state.viewWidth / this.tileSize)
             endCol = this.nCols;
+
         } else {
             startCol = this.nCols;
             endCol = this.nCols;
         }
 
-        if (this.view.ymin >= 0 && this.view.ymax <= this.height) {
-            startRow = Math.floor(this.view.ymin / this.tileSize);
-            endRow = Math.ceil(this.view.ymax / this.tileSize);
-        } else if (this.view.ymin < 0) {
-            startRow = 0;
-            endRow = Math.ceil(this.viewHeight / this.tileSize);
-        } else if (this.view.ymax > this.height && this.view.ymin <= this.height) {
-            startRow = Math.floor(this.nRows - this.viewHeight / this.tileSize);
-            endRow = this.nRows;
-        } else {
-            startRow = this.nCols;
-            endRow = this.nRows;
-        }
+        // Middle case - figure out which rows/columns to grab
+        if (ymin >= 0 && ymax <= this.height) {
 
+            startRow = Math.floor(ymin / this.tileSize);
+            endRow = Math.ceil(ymax / this.tileSize);
+            yoffset = startRow * this.tileSize - ymin;
+
+            // Top case - if y is too high to see
+        } else if (ymin <= 0) {
+
+            startRow = 0;
+            endRow = Math.ceil(state.viewHeight / this.tileSize);
+
+            // Bottom case - ymax outside of bounds, but ymin still in it
+        } else if (ymax > this.height && ymin < this.height) {
+
+            startRow = Math.floor(this.nRows - state.viewHeight / this.tileSize);
+            endRow = this.nRows;
+
+        }
         return {
             grid: this.grid.map((val) => val.slice(startCol, endCol)).slice(startRow, endRow),
-            startRow: startRow,
-            endRow: endRow,
-            startCol: startCol,
-            endCol: endCol,
+            xOffset: xoffset,
+            yOffset: yoffset,
         };
     }
 
     isCurrent() {
         if (JSON.stringify(this.current) !== JSON.stringify(this.previous)) {
-            this.needsUpdate = true;
+            return false;
+        } else {
+            return true;
         }
     }
 
     render() {
-        this.isCurrent();
-        if ((!this.isLoaded && this.tileSheet.isLoaded) || this.needsUpdate) {
-            const { grid } = this.getVisibleGrid();
-            this.context.clearRect(0, 0, this.viewWidth, this.viewHeight);
-            for (let i = 0; i < grid.length; i++) {
-                for (let j = 0; j < grid[0].length; j++) {
-                    const { img, x, y, size } = this.tileSheet.fetchTile(grid[i][j]);
-                    this.context.drawImage(img, x, y, size, size, j * this.tileSize, i * this.tileSize, this.tileSize, this.tileSize);
+        if (this.tileSheet.isLoaded) {
+            if (!this.isLoaded || !this.isCurrent()) {
+                this.context.clearRect(0, 0, state.viewWidth, state.viewHeight);
+
+                const { grid, xOffset, yOffset } = this.getVisibleGrid();
+                for (let i = 0; i < grid.length; i++) {
+                    for (let j = 0; j < grid[0].length; j++) {
+                        const { img, x, y, size } = this.tileSheet.fetchTile(grid[i][j]);
+                        this.context.drawImage(img, x, y, size, size, j * this.tileSize + xOffset, i * this.tileSize + yOffset, this.tileSize, this.tileSize);
+                    };
                 };
-            };
-            this.isLoaded = true;
+                this.isLoaded = true;
+                this.previous = this.current;
+            }
         }
-        this.previous = this.current;
     };
 
     update() {
-        this.current = { ...this.view }
+        this.current = { ...this.getVisibleGrid() }
     };
 };
 
