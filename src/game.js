@@ -15,6 +15,10 @@ class Game {
 
         this.state = {};
 
+        Object.defineProperty(this, 'global', {
+            get: function () { return state },
+        });
+
         this.events = {
             keys: keys,
         };
