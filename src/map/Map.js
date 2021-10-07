@@ -28,6 +28,12 @@ class Map {
         state.update('boundaries', this.boundaries);
         state.update('mapTileSize', this.tileSize);
 
+        state.update('cameraX1', this.width / 2 - state.viewWidth / 2)
+        state.update('cameraX2', this.width / 2 + state.viewWidth / 2)
+
+        state.update('cameraY1', this.height / 2 - state.viewHeight / 2)
+        state.update('cameraY2', this.height / 2 + state.viewHeight / 2)
+
         state.update('globalX', this.width / 2);
         state.update('globalY', this.height / 2);
 
