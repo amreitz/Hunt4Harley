@@ -162,8 +162,8 @@ class Player {
             this.moveSpeed = 10;
         } else {
             this.moveSpeed = 0;
-            this.animation.state = 'idle';
         }
+        this.animation.state = 'idle';
         if (this.keys.isPressed.left || this.keys.isPressed.right || this.keys.isPressed.up || this.keys.isPressed.down) {
             this.movePlayer('left', -1)
             this.movePlayer('right', 1);
