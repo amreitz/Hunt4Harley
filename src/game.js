@@ -8,6 +8,7 @@ import { gameLoop } from './engine/game.loop.js';
 import state from './engine/game.state.js';
 import { Intro } from './context/Intro.js';
 import SceneLoader from './context/SceneLoader.js';
+import Entity from './characters/Entity.js';
 
 class Game {
 
@@ -25,6 +26,9 @@ class Game {
         // Initialize the game
         // this.addEntity(new Intro(this), 'intro');
         this.addEntity(new GrassyMap(this), 'map');
+        const randX = Math.floor(Math.random() * state.mapCols);
+        const randY = Math.floor(Math.random() * state.mapRows);
+        this.addEntity(new Entity(this, randX, randY), 'object1');
         this.addEntity(new Player(this), 'player');
         this.addEntity(new Intro(this), 'intro');
 
@@ -39,7 +43,7 @@ class Game {
     }
 
     buildContext() {
-        const canvases = ['bkg', 'player', 'ui'];
+        const canvases = ['bkg', 'world', 'player', 'ui'];
         canvases.forEach(val => {
             const { canvas, context, width, height, scale } = buildCanvas('game-stage', `${val}-canvas`);
             this[`${val}Canvas`] = canvas;

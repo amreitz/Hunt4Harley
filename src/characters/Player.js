@@ -69,15 +69,15 @@ class Player {
 
                 let xmin, xmax, ymin, ymax;
                 if (dir === 'left' || dir === 'right') {
-                    xmin = newVal - this.width / 4;
-                    xmax = newVal + this.width / 4;
-                    ymin = state.globalY + this.width / 4;
+                    xmin = newVal - this.width / (5);
+                    xmax = newVal + this.width / (5);
+                    ymin = state.globalY + this.height / (5);
                     ymax = state.globalY + this.height / 2;
                 } else {
-                    ymin = newVal + this.width / 4;
+                    ymin = newVal + this.height / (5);
                     ymax = newVal + this.height / 2;
-                    xmin = state.globalX - this.width / 4;
-                    xmax = state.globalX + this.width / 4;
+                    xmin = state.globalX - this.width / (5);
+                    xmax = state.globalX + this.width / (5);
                 }
                 if (!isBoundaryHit(xmin, xmax, ymin, ymax)) {
                     state.update(pos, newVal);
