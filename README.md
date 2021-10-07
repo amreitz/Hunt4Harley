@@ -13,10 +13,9 @@ with the world in a more sophisticated manner.
   - [x] Walking around the screen
   - [x] Responsiveness to keys 
   - [x] Responsive animated sprites
-  - [ ] Interactions with elements on the screen
+  - [x] Interactions with elements on the screen
     - [x] Handling of boundaries/no-go zones
-    - [ ] Handling of interaction with characters
-    - [ ] Handling of interaction with items
+    - [x] Handling of interaction with characters / items
 - Maps
   - [x] Map generation and display
   - [x] Map updating engine (not on every refresh unless player is moving)
@@ -24,9 +23,12 @@ with the world in a more sophisticated manner.
   - [ ] Population of NPC/characters and important interactive items
   - [ ] Intro fade screen
 - Milestones (Story)
-  - [ ] Cutscenes when important items are interacted with
+  - [x] Cutscenes when important items are interacted with
+  - [ ] Level structure
+  - [ ] Level progression
   - [ ] Fades between maps/levels
 - Characters
+  - [ ] Creation of characters
   - [ ] Animations for characters
   - [ ] Movement and population in map
 - Engine
