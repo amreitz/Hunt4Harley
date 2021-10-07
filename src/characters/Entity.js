@@ -26,7 +26,7 @@ class Entity {
             state: 'idle',
         }
 
-        this.isActive = false;
+        this.isActive = true;
 
         this.context = scope.worldContext;
 
@@ -37,7 +37,9 @@ class Entity {
         const { cameraX1, cameraY1 } = state;
         const localX = this.dim.x - cameraX1;
         const localY = this.dim.y - cameraY1;
-        this.context.fillRect(localX, localY, 32, 32);
+    }
+
+    isTouched() {
     }
 
     checkInView() {
@@ -69,8 +71,7 @@ class Entity {
 
         if ((x1 >= thisX1 && x1 <= thisX2) || (x2 >= thisX1 && x2 <= thisX2)) {
             if ((y1 >= thisY1 && y1 <= thisY2) || (y2 >= thisY1 && y2 <= thisY2)) {
-                state.gameOver = true;
-                state.loadScene = 'GameOver';
+                this.isTouched();
             }
         }
     }

@@ -16,7 +16,7 @@ class GameOver extends Scene {
             this.context.textAlign = 'center';
             this.context.font = '44pt Arial';
             this.context.fillStyle = `rgba(0,0,0,${this.alpha})`
-            this.context.fillText("You found Harley!", this.width / 2, this.height / 3);
+            this.context.fillText("You found Harley's Collar!", this.width / 2, this.height / 3);
         }
     }
 
