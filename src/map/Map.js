@@ -38,16 +38,13 @@ class Map {
         let xoffset = 0;
         let yoffset = 0;
 
-        let playerWidth = state.playerWidth / 2;
-        let playerHeight = state.playerHeight / 2;
-
-        const xmin = state.globalX + playerWidth - state.viewWidth / 2;
+        const xmin = state.globalX - state.viewWidth / 2;
         const xmax = state.globalX + state.viewWidth / 2;
-        const ymin = state.globalY + playerHeight - state.viewHeight / 2;
+        const ymin = state.globalY - state.viewHeight / 2;
         const ymax = state.globalY + state.viewHeight / 2;
 
-        const width = this.width - playerWidth;
-        const height = this.height - playerHeight;
+        const width = this.width;
+        const height = this.height;
 
 
         if (xmin > 0 && xmax < width) {

@@ -53,21 +53,34 @@ class Player {
             this.animation.dir = dir;
             this.animation.state = 'walking';
 
-            if (state[pos] <= globalSize - playerSize) {
+            if (state[pos] < globalSize + playerSize / 2) {
                 let newVal = state[pos] + this.moveSpeed * step;
-                if (!isBoundaryHit(newVal, pos, this.width, this.height)) {
+
+                let xmin, xmax, ymin, ymax;
+                if (dir === 'left' || dir === 'right') {
+                    xmin = newVal - this.width / 2;
+                    xmax = newVal + this.width / 2;
+                    ymin = state.globalY + this.width / 4;
+                    ymax = state.globalY + this.height / 2;
+                } else {
+                    ymin = newVal + this.width / 4;
+                    ymax = newVal + this.height / 2;
+                    xmin = state.globalX - this.width / 2;
+                    xmax = state.globalX + this.width / 2;
+                }
+                if (!isBoundaryHit(xmin, xmax, ymin, ymax)) {
                     state.update(pos, newVal);
                     this[pos] = state[pos];
                 };
             }
             // make sure we aren't exceeding the viewport or global map
-            if (state[pos] > globalSize - playerSize) {
-                state.update(pos, globalSize - playerSize);
-                this[pos] = globalSize - playerSize
+            if (state[pos] > globalSize - playerSize / 2) {
+                state.update(pos, globalSize - playerSize / 2);
+                this[pos] = globalSize - playerSize / 2;
             }
-            if (state[pos] < 0) {
-                state.update(pos, 0)
-                this[pos] = 0;
+            if (state[pos] < playerSize / 2) {
+                state.update(pos, playerSize / 2)
+                this[pos] = playerSize / 2;
             }
         }
     }
@@ -86,22 +99,21 @@ class Player {
 
         let finalX, finalY;
 
-        if (Y >= (mapHeight - viewHeight / 2 - height / 2)) {
+        if (Y >= (mapHeight - viewHeight / 2)) {
             finalY = Math.round((viewHeight - (mapHeight - Y)));
-        } else if (Y <= viewHeight / 2 - height / 2) {
+        } else if (Y + height / 2 <= viewHeight / 2) {
             finalY = Math.round(Y);
         } else {
-            finalY = Math.round(viewHeight / 2 - height / 2);
+            finalY = Math.round(viewHeight / 2);
         }
 
-        if (X >= (mapWidth - viewWidth / 2 - width / 2)) {
+        if (X >= (mapWidth - viewWidth / 2)) {
             finalX = Math.round((viewWidth - (mapWidth - X)));
-        } else if (X <= viewWidth / 2 - width / 2) {
+        } else if (X <= viewWidth / 2) {
             finalX = Math.round(X);
         } else {
-            finalX = Math.round(viewWidth / 2 - width / 2);
+            finalX = Math.round(viewWidth / 2);
         }
-        console.log(X, Y, finalX, finalY)
         return {
             x: finalX,
             y: finalY,
@@ -120,7 +132,7 @@ class Player {
             this.context.drawImage(
                 tile.img,
                 tile.x, tile.y, sprite.tileWidth, sprite.tileHeight,
-                x, y, this.width, this.height
+                x - this.width / 2, y - this.height / 2, this.width, this.height
             );
         }
     }
