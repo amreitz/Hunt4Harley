@@ -1,4 +1,4 @@
-import state from '../engine/game.state.js';
+import state from './game.state.js';
 
 // Find if the desired x,y location (and width/height of object)
 // collides with any known boundaries on the map.

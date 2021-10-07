@@ -7,7 +7,7 @@ class keysDown {
             right: null,
             up: null,
             down: null,
-            jump: null,
+            space: null,
         }
 
         // // Registering the buttons (for mobile).
@@ -47,7 +47,7 @@ class keysDown {
                 return directions.down = true;
             }
             if (ev.code === 'Space') {
-                return directions.jump = true;
+                return directions.space = true;
             }
         });
         // Set up `onkeyup` event handler.
@@ -65,7 +65,7 @@ class keysDown {
                 return directions.down = false;
             }
             if (ev.code === 'Space') {
-                return directions.jump = false;
+                return directions.space = false;
             }
         });
 
@@ -93,8 +93,8 @@ class keysDown {
             configurable: true,
             enumerable: true
         });
-        Object.defineProperty(this.isPressed, 'jump', {
-            get: function () { return directions.jump; },
+        Object.defineProperty(this.isPressed, 'space', {
+            get: function () { return directions.space; },
             configurable: true,
             enumerable: true
         });
@@ -104,4 +104,4 @@ class keysDown {
 
 const keys = new keysDown();
 
-export { keys }
+export default keys

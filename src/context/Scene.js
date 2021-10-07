@@ -1,17 +1,20 @@
-import { addMouseEvent, removeMouseEvent, addTouchEvent, removeTouchEvent } from "../utils/events.mouse.js";
+import { addMouseEvent, removeMouseEvent, addTouchEvent, removeTouchEvent } from "../input/events.mouse.js";
+import state from "../engine/game.state.js";
 
 class Scene {
-    constructor(scope, clickable=true) {
+    constructor(scope, clickable = true) {
 
         this.canvas = scope.uiCanvas;
         this.context = scope.uiContext;
 
-        this.isActive = true;
+        this.isActive = false;
         this.isLoaded = false;
-        
-        this.width = scope.constants.width;
-        this.height = scope.constants.height;
-        this.keys = scope.constants.keys;
+
+        this.width = state.viewWidth
+        this.height = state.viewHeight
+        this.keys = state.keys;
+
+        this.alpha = 1;
 
         if (clickable) {
             addMouseEvent(this, this.canvas, 'clicks')
@@ -29,7 +32,12 @@ class Scene {
             removeTouchEvent(this, this.canvas, name);
         }
     }
-    
+
+    clear() {
+        this.isActive = false;
+        this.context.clearRect(0, 0, this.width, this.height);
+    }
+
 
     render() {
 

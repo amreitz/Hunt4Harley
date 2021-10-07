@@ -8,7 +8,7 @@ class SpriteLoader {
         this.tileHeight = tileHeight || tileWidth;
 
         this.img.onload = () => {
-            console.log("Character tile sheet loaded successfully.");
+            console.log("Sprite sheet loaded successfully.");
             this.nCols = this.img.width / this.tileWidth;
             this.nRows = this.img.height / this.tileHeight;
             this.nFrames = rowOriented ? this.nCols : this.nRows;
