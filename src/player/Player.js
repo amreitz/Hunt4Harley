@@ -33,6 +33,18 @@ class Player {
         this.globalX = state.globalX;
         this.globalY = state.globalY;
 
+        // make sure we don't spawn on a boundary
+        while (isBoundaryHit(this.globalX - this.width / 4,
+            this.globalX + this.width / 4,
+            this.globalY + this.height / 4,
+            this.globalY + this.height / 2)) {
+            console.log("Whoops! Spawned on a boundary...")
+            this.globalX += this.moveSpeed * 1;
+            this.globalY += this.moveSpeed * 1;
+            state.update('globalX', this.globalX);
+            state.update('globalY', this.globalY);
+        }
+
 
     };
 
@@ -58,15 +70,15 @@ class Player {
 
                 let xmin, xmax, ymin, ymax;
                 if (dir === 'left' || dir === 'right') {
-                    xmin = newVal - this.width / 2;
-                    xmax = newVal + this.width / 2;
+                    xmin = newVal - this.width / 4;
+                    xmax = newVal + this.width / 4;
                     ymin = state.globalY + this.width / 4;
                     ymax = state.globalY + this.height / 2;
                 } else {
                     ymin = newVal + this.width / 4;
                     ymax = newVal + this.height / 2;
-                    xmin = state.globalX - this.width / 2;
-                    xmax = state.globalX + this.width / 2;
+                    xmin = state.globalX - this.width / 4;
+                    xmax = state.globalX + this.width / 4;
                 }
                 if (!isBoundaryHit(xmin, xmax, ymin, ymax)) {
                     state.update(pos, newVal);
