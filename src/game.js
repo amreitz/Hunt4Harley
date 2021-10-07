@@ -8,7 +8,7 @@ import { gameLoop } from './engine/game.loop.js';
 import state from './engine/game.state.js';
 import { Intro } from './context/Intro.js';
 import SceneLoader from './context/SceneLoader.js';
-import Entity from './characters/Entity.js';
+import Collar from './characters/Collar.js';
 
 class Game {
 
@@ -28,7 +28,7 @@ class Game {
         this.addEntity(new GrassyMap(this), 'map');
         const randX = Math.floor(Math.random() * state.mapCols);
         const randY = Math.floor(Math.random() * state.mapRows);
-        this.addEntity(new Entity(this, randX, randY), 'object1');
+        this.addEntity(new Collar(this, randX, randY), 'collar');
         this.addEntity(new Player(this), 'player');
         this.addEntity(new Intro(this), 'intro');
 
