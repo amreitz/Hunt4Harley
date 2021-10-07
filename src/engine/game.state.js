@@ -1,3 +1,5 @@
+import keys from "../input/events.keys.js";
+
 class State {
     constructor() {
         this.globalX = 0; // global position of characters on screen
@@ -14,6 +16,14 @@ class State {
 
         this.playerWidth = 0;
         this.playerHeight = 0;
+
+        this.playerActive = false;
+        this.gameOver = false;
+
+        this.keys = keys;
+
+        this.loadScene = 'Intro';
+        this.unloadScene = null;
 
     }
 

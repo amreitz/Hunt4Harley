@@ -1,35 +1,31 @@
 import Scene from './Scene.js'
-import TextButton from './Buttons.js';
+import state from '../engine/game.state.js';
 
 class Intro extends Scene {
 
-    render () {
+    render() {
         if (!this.isLoaded && this.isActive) {
-            this.context.fillStyle = '#ccc';
-            this.context.fillRect(0,0,this.width, this.height);
-            this.context.textAlign='center';
-            this.context.font = '18pt Arial';
-            this.context.fillStyle = '#000'
-            this.context.fillText("Hunt for Harley", this.width/2, this.height/2);
-            this.context.font = '14pt Arial';
-            this.context.fillText("An Adventure RPG", this.width/2, this.height/2+25);
+            this.context.clearRect(0, 0, this.width, this.height);
+            this.context.textAlign = 'center';
+            this.context.font = '44pt Arial';
+            this.context.fillStyle = `rgba(0,0,0,${this.alpha})`
+            this.context.fillText("Hunt for Harley", this.width / 2, this.height / 3);
+            this.context.font = '20pt Arial';
+            this.context.fillText("Use W-A-S-D or arrow keys to control the kitty.", this.width / 2, this.height - 225);
+            this.context.fillText("Find his friend, Harley!", this.width / 2, this.height - 200);
+            this.context.fillText("Press SPACE to start", this.width / 2, this.height - 175);
             this.isLoaded = true;
-            this.proceedButton = new TextButton(this.context, this.width/2, this.height/2+55, 200, 25, 'Click to Proceed');
-            this.proceedButton.draw();
-            console.log("Intro Scene loaded.")
         }
     }
 
-    update () {
-        if (this.proceedButton) {
-            if (this.proceedButton.checkClicked(this.clickX, this.clickY)) {
-            alert("You clicked the button!");
-            this.clickX = 0;
-            this.clickY = 0;
-            }
+    update() {
+        if (state.keys.isPressed.space) {
+            this.clear();
+            state.unloadScene = 'Intro';
         }
     }
+
 
 };
 
-export {Intro};
+export { Intro };

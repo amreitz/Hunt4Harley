@@ -1,13 +1,13 @@
 import { buildCanvas } from './utils/canvas.js';
-import { keys } from './utils/events.keys.js';
-import { Intro } from './context/Intro.js';
 import { GrassyMap } from './map/maps/GrassyMap.js';
-import { Player } from './player/Player.js';
+import { Player } from './characters/Player.js';
 
 import { gameUpdate } from './engine/game.update.js';
 import { gameRender } from './engine/game.render.js';
 import { gameLoop } from './engine/game.loop.js';
 import state from './engine/game.state.js';
+import { Intro } from './context/Intro.js';
+import SceneLoader from './context/SceneLoader.js';
 
 class Game {
 
@@ -17,11 +17,8 @@ class Game {
 
         Object.defineProperty(this, 'global', {
             get: function () { return state },
+            set: function (key, value) { state[key] = value; }
         });
-
-        this.events = {
-            keys: keys,
-        };
 
         this.buildContext();
 
@@ -29,7 +26,9 @@ class Game {
         // this.addEntity(new Intro(this), 'intro');
         this.addEntity(new GrassyMap(this), 'map');
         this.addEntity(new Player(this), 'player');
+        this.addEntity(new Intro(this), 'intro');
 
+        this.scene = new SceneLoader(this);
 
     }
 
